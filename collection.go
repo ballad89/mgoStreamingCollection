@@ -26,7 +26,7 @@ func ConvertToCapped(c *mgo.Collection, size int) error {
 	return c.Database.Run(bson.D{{"convertToCapped", c.Name}, {"size", size}}, nil)
 }
 
-func CreateCappedCollection(db *mgo.Database, name string, size int) error {
+func createCappedCollection(db *mgo.Database, name string, size int) error {
 	return db.C(name).Create(&mgo.CollectionInfo{
 		Capped:   true,
 		MaxBytes: size,
@@ -45,7 +45,7 @@ func CreateOrConvertCollection(database *mgo.Database, collectionName string, si
 	}
 
 	if !exists {
-		err := CreateCappedCollection(database, collectionName, size)
+		err := createCappedCollection(database, collectionName, size)
 		if err != nil {
 			return nil, err
 		}
@@ -59,7 +59,7 @@ func CreateOrConvertCollection(database *mgo.Database, collectionName string, si
 		return nil, err
 	}
 
-	if !collectionStats.Capped {
+	if !collectionStats.Capped || collectionStats.MaxBytes != size {
 		err = ConvertToCapped(collection, size)
 		if err != nil {
 			return nil, err
@@ -70,11 +70,20 @@ func CreateOrConvertCollection(database *mgo.Database, collectionName string, si
 }
 
 func Stats(c *mgo.Collection) (*mgo.CollectionInfo, error) {
-	result := mgo.CollectionInfo{}
-	err := c.Database.Run(bson.D{{"collStats", c.Name}}, &result)
+	stats := struct {
+		Capped  bool
+		Maxsize int `bson:"maxSize"`
+	}{}
+
+	err := c.Database.Run(bson.D{{"collStats", c.Name}}, &stats)
 
 	if err != nil {
 		return nil, err
+	}
+
+	result := mgo.CollectionInfo{
+		Capped:   stats.Capped,
+		MaxBytes: stats.Maxsize,
 	}
 	return &result, nil
 }

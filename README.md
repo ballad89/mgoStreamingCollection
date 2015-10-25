@@ -1,6 +1,19 @@
-##header
+##MongoDB streaming collection
+This package is built ontop of the mongodb driver `gopkg.in/mgo.v2`.
+It adds functionality to
+- Check if a collection exist
+- Convert an uncapped collection to a capped one
+- A constructor like function, which returns a capped collection
+- Get a collection's stats
+- Query a capped collection and stream documents out of it into a channel 
 
-**bold**
+**Installation**
+`go get github.com/ballad89/mgoStreamingCollection`
+
+**Example Usage**
+
+Examples of how to use the individual functions can be seen in the test file
+Below is an example of how you would use it in a program
 
 ```
 package main
@@ -8,7 +21,7 @@ package main
 import (
     "fmt"
     "gopkg.in/mgo.v2"
-    "mgoStreamingCollection"
+    "github.com/ballad89/mgoStreamingCollection"
 )
 
 func main() {
