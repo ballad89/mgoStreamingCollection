@@ -1,9 +1,9 @@
 package mgoStreamingCollection_test
 
 import (
+	"github.com/ballad89/mgoStreamingCollection"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"mgoStreamingCollection"
 	"testing"
 )
 
