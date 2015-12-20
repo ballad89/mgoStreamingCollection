@@ -1,9 +1,11 @@
 package mgoStreamingCollection_test
 
 import (
+	"fmt"
 	"github.com/ballad89/mgoStreamingCollection"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"os"
 	"testing"
 )
 
@@ -169,7 +171,11 @@ func TestTailQuery(t *testing.T) {
 
 func setup() (*mgo.Database, error) {
 
-	connectUrl := "mongodb://33.33.13.45/test"
+	testServer := os.Getenv("DatabaseServer")
+	if testServer == "" {
+		testServer = "127.0.0.1"
+	}
+	connectUrl := fmt.Sprintf("mongodb://%s/test", testServer)
 
 	session, err := mgo.Dial(connectUrl)
 
