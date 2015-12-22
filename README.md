@@ -1,4 +1,4 @@
-##MongoDB streaming collection
+##MongoDB streaming collection [![Build Status](https://travis-ci.org/ballad89/mgoStreamingCollection.svg?branch=master)](https://travis-ci.org/ballad89/mgoStreamingCollection)
 This package is built ontop of the mongodb driver `gopkg.in/mgo.v2`.
 It adds functionality to
 - Check if a collection exist
